@@ -30,7 +30,7 @@ def loadPred(dir, limit):
 
 
 def loadPose(dir, limit):
-    predData = []
+    poseData = []
     counter = 0
     for file in os.listdir('data/BP4D/' + dir):
         if file.endswith(".mat"):
@@ -39,22 +39,24 @@ def loadPose(dir, limit):
             filepath = os.path.join(my_path, "data/BP4D/2DFeatures", file)
             fh = h5py.File(filepath, 'r')
             # Extracting the list of landmarks array objects from pred field
-            lms_obj = fh.get('fit/pose/rot')
-            # Initializing output 3d array
+            lms_obj = fh.get('fit/pose')
+            # # Initializing output 3d array
             all_lms_array = np.zeros((len(lms_obj), 3, 3))
             # Iterate over the list to fetch each frame’s landmarks array
             for i in range(0, len(lms_obj)):
-                # Returns 49*2 numpy array
-                all_lms_array[i] = fh[lms_obj[i][0]].value
-            predData.append(all_lms_array)
+                rot = fh[lms_obj[i][0]].get('rot')
+                # Returns 3*3 numpy array
+                all_lms_array[i] = rot.value
+            poseData.append(all_lms_array)
 
         counter = counter + 1
         if (counter == limit):
             break
 
-    return predData
+    return poseData
 
 
 X = loadPred('2DFeatures', 10)
 Y = loadPose('2DFeatures', 10)
+print(X)
 print(Y)
