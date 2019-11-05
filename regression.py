@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 import math
 import logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.ERROR)
 import matplotlib.pyplot as plt
 from pandas import DataFrame
 
