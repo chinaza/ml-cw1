@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from pandas import DataFrame
 import pandas as pd
 import os
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import KFold
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
@@ -35,7 +35,8 @@ n_hidden3 = 50
 n_input = 98
 n_output = 1
 # Learning parameters
-learning_constant = 0.006
+# learning_constant = 0.006
+learning_constant = 0.06
 number_epochs = 10
 batch_size = 1000
 
@@ -99,12 +100,20 @@ label = angle_array  # +1e-50-1e-50
 
 batch_x = (whole_data-200)/2000  # feature scaling - normlaization
 temp = np.array([angle_array[:, 0]])
+# batch_y = angle_array
 batch_y = temp.transpose()  # so that dimeniosn match
 
+batch_x_train = batch_x
+batch_x_test = batch_x
+batch_y_train = batch_y
+batch_y_test = batch_y
+label_train = label
+label_test = label
 
-batch_x_train, batch_x_test, batch_y_train, batch_y_test, label_train, label_test = train_test_split(
-    batch_x, batch_y, label, test_size=0.2, random_state=0)
-
+kf = KFold(n_splits=2, shuffle=False)
+for train_index, test_index in kf.split(batch_x):
+    batch_x_train, batch_x_test = batch_x[train_index], batch_x[test_index]
+    batch_y_train, batch_y_test = batch_y[train_index], batch_y[test_index]
 
 epoch_number = []
 accuracy = []
@@ -146,10 +155,10 @@ with tf.Session() as sess:
         {X: batch_x_test, Y: batch_y_test})).mean())
     # tf.keras.evaluate(pred,batch_x)
 
+    input("Press Enter to continue...")
+
     print("Prediction:", pred.eval({X: batch_x_train}))
     print(batch_y)
-
-    input("Press Enter to continue...")
 
     output = neural_network.eval({X: batch_x_train})
     plt.plot(batch_y_train, 'r', output, 'b')
@@ -170,7 +179,7 @@ with tf.Session() as sess:
 
     print(df)
 
-    #correct_prediction = tf.math.subtract((pred), (Y))
+    # correct_prediction = tf.math.subtract((pred), (Y))
     # Calculate accuracy
-    #accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-    #print("Accuracy:", accuracy.eval({X: batch_x, Y: batch_y}))
+    # accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+    # print("Accuracy:", accuracy.eval({X: batch_x, Y: batch_y}))

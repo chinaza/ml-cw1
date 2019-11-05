@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from pandas import DataFrame
 import pandas as pd
 import os
-from sklearn.model_selection import KFold
+from sklearn.model_selection import train_test_split
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
@@ -101,17 +101,10 @@ batch_x = (whole_data-200)/2000  # feature scaling - normlaization
 temp = np.array([angle_array[:, 0]])
 batch_y = temp.transpose()  # so that dimeniosn match
 
-batch_x_train = batch_x
-batch_x_test = batch_x
-batch_y_train = batch_y
-batch_y_test = batch_y
-label_train = label
-label_test = label
 
-kf = KFold(n_splits=2)
-for train_index, test_index in kf.split(batch_x):
-    batch_x_train, batch_x_test = batch_x[train_index], batch_x[test_index]
-    batch_y_train, batch_y_test = batch_y[train_index], batch_y[test_index]
+batch_x_train, batch_x_test, batch_y_train, batch_y_test, label_train, label_test = train_test_split(
+    batch_x, batch_y, label, test_size=0.2, shuffle=False)
+
 
 epoch_number = []
 accuracy = []
@@ -177,7 +170,7 @@ with tf.Session() as sess:
 
     print(df)
 
-    # correct_prediction = tf.math.subtract((pred), (Y))
+    #correct_prediction = tf.math.subtract((pred), (Y))
     # Calculate accuracy
-    # accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-    # print("Accuracy:", accuracy.eval({X: batch_x, Y: batch_y}))
+    #accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+    #print("Accuracy:", accuracy.eval({X: batch_x, Y: batch_y}))
