@@ -25,9 +25,10 @@ angle_arrayt=angle_array.transpose()
 
 
 #Network parameters
-n_hidden1 = 147
-n_hidden2 = 74
-n_hidden3 = 50
+n_hidden1 = 60
+n_hidden2 = 50
+n_hidden3 = 40
+n_hidden4 = 30
 n_input = 98
 n_output = 1
 #Learning parameters
@@ -48,7 +49,9 @@ b2 = tf.Variable(tf.random_normal([n_hidden2]))
 #Biases output layer
 b3 = tf.Variable(tf.random_normal([n_hidden3]))
 
-b4 = tf.Variable(tf.random_normal([n_output]))
+b4 = tf.Variable(tf.random_normal([n_hidden4]))
+
+b5 = tf.Variable(tf.random_normal([n_output]))
 
 
 #Weights connecting input layer with first hidden layer
@@ -58,7 +61,9 @@ w2 = tf.Variable(tf.random_normal([n_hidden1, n_hidden2]))
 #Weights connecting second hidden layer with output layer
 w3 = tf.Variable(tf.random_normal([n_hidden2, n_hidden3]))
 
-w4 = tf.Variable(tf.random_normal([n_hidden3, n_output]))
+w4 = tf.Variable(tf.random_normal([n_hidden3, n_hidden4]))
+
+w5 = tf.Variable(tf.random_normal([n_hidden4, n_output]))
 
 
 
@@ -71,8 +76,10 @@ def multilayer_perceptron(input_d):
     layer_2 = tf.nn.sigmoid(tf.add(tf.matmul(layer_1, w2), b2))
     #Task of neurons of output layer
     layer_3 = tf.nn.sigmoid(tf.add(tf.matmul(layer_2, w3), b3))
+
+    layer_4 = tf.nn.sigmoid(tf.add(tf.matmul(layer_3, w4), b4))
     #Task of neurons of output layer
-    out_layer = tf.add(tf.matmul(layer_3, w4),b4)
+    out_layer = tf.add(tf.matmul(layer_4, w5),b5)
     
     return out_layer
 
