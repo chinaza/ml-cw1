@@ -110,72 +110,74 @@ label_test = label
 
 kf = KFold(n_splits=2)
 for train_index, test_index in kf.split(batch_x):
-    print('train', train_index)
-    print('test', test_index)
     batch_x_train, batch_x_test = batch_x[train_index], batch_x[test_index]
     batch_y_train, batch_y_test = batch_y[train_index], batch_y[test_index]
 
-# epoch_number = []
-# accuracy = []
+epoch_number = []
+accuracy = []
 
 
-# with tf.Session() as sess:
-#     sess.run(init)
-#     # Training epoch
-#     for epoch in range(number_epochs):
-#         # Get one batch of images
-#         #batch_x, batch_y = mnist.train.next_batch(batch_size)
+with tf.Session() as sess:
+    sess.run(init)
+    # Training epoch
+    for epoch in range(number_epochs):
+        # Get one batch of images
+        #batch_x, batch_y = mnist.train.next_batch(batch_size)
 
-#         #print (batch_x)
-#         #print ((batch_x.shape))
-#         # Run the optimizer feeding the network with the batch
-#         sess.run(optimizer, feed_dict={X: batch_x_train, Y: batch_y_train})
+        #print (batch_x)
+        #print ((batch_x.shape))
+        # Run the optimizer feeding the network with the batch
+        sess.run(optimizer, feed_dict={X: batch_x_train, Y: batch_y_train})
 
-#         with open("results.csv", "w+") as textfile:
-#             textfile.write(
-#                 str(epoch) + "," + str(loss_op.eval({X: batch_x_train, Y: batch_y_train})))
-#             textfile.write("\n")
-#             textfile.close()
+        with open("results.csv", "w+") as textfile:
+            textfile.write(
+                str(epoch) + "," + str(loss_op.eval({X: batch_x_train, Y: batch_y_train})))
+            textfile.write("\n")
+            textfile.close()
 
-#         print("Epoch:", epoch, "Loss:", loss_op.eval(
-#             {X: batch_x_train, Y: batch_y_train}))
+        print("Epoch:", epoch, "Loss:", loss_op.eval(
+            {X: batch_x_train, Y: batch_y_train}))
 
-#         # Display the epoch
-#         if epoch % 100 == 0 and epoch > 10:
-#             print("Epoch:", '%d' % (epoch))
-#             print("Accuracy:", loss_op.eval(
-#                 {X: batch_x_train, Y: batch_y_train}))
+        # Display the epoch
+        if epoch % 100 == 0 and epoch > 10:
+            print("Epoch:", '%d' % (epoch))
+            print("Accuracy:", loss_op.eval(
+                {X: batch_x_train, Y: batch_y_train}))
 
-#     # Test model
-#     pred = (neural_network)  # Apply softmax to logits
-#     accuracy = tf.keras.losses.MSE(pred, Y)
-#     print("Accuracy:", np.square(accuracy.eval(
-#         {X: batch_x_train, Y: batch_y_train})).mean())
-#     # tf.keras.evaluate(pred,batch_x)
+    # Test model
+    pred = (neural_network)  # Apply softmax to logits
+    accuracy = tf.keras.losses.MSE(pred, Y)
+    print("Accuracy Train:", np.square(accuracy.eval(
+        {X: batch_x_train, Y: batch_y_train})).mean())
+    print("Accuracy Test:", np.square(accuracy.eval(
+        {X: batch_x_test, Y: batch_y_test})).mean())
+    # tf.keras.evaluate(pred,batch_x)
 
-#     print("Prediction:", pred.eval({X: batch_x_train}))
-#     print(batch_y)
+    input("Press Enter to continue...")
 
-#     output = neural_network.eval({X: batch_x_train})
-#     plt.plot(batch_y_train, 'r', output, 'b')
-#     plt.ylabel('some numbers')
-#     plt.show()
+    print("Prediction:", pred.eval({X: batch_x_train}))
+    print(batch_y)
 
-#     plt.plot(batch_y_train[30000:300020], 'r', output[30000:300020], 'b')
-#     plt.ylabel('some numbers')
-#     plt.show()
+    output = neural_network.eval({X: batch_x_train})
+    plt.plot(batch_y_train, 'r', output, 'b')
+    plt.ylabel('some numbers')
+    plt.show()
 
-#     print(batch_y_train[30000:300020])
-#     print(output[30000:300020])
+    plt.plot(batch_y_train[30000:300020], 'r', output[30000:300020], 'b')
+    plt.ylabel('some numbers')
+    plt.show()
 
-#     df = DataFrame(output)
+    print(batch_y_train[30000:300020])
+    print(output[30000:300020])
 
-#     # Don't forget to add '.csv' at the end of the path
-#     export_csv = df.to_csv('output.csv', index=None, header=True)
+    df = DataFrame(output)
 
-#     print(df)
+    # Don't forget to add '.csv' at the end of the path
+    export_csv = df.to_csv('output.csv', index=None, header=True)
 
-#     #correct_prediction = tf.math.subtract((pred), (Y))
-#     # Calculate accuracy
-#     #accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-#     #print("Accuracy:", accuracy.eval({X: batch_x, Y: batch_y}))
+    print(df)
+
+    # correct_prediction = tf.math.subtract((pred), (Y))
+    # Calculate accuracy
+    # accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+    # print("Accuracy:", accuracy.eval({X: batch_x, Y: batch_y}))
