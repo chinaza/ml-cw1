@@ -20,7 +20,8 @@ def loadPred(dir, limit):
             for i in range(0, len(lms_obj)):
                 # Returns 49*2 numpy array
                 all_lms_array[i] = fh[lms_obj[i][0]].value.transpose()
-            predData.append(all_lms_array)
+            # predData.append(all_lms_array)
+            predData = all_lms_array
 
         counter = counter + 1
         if (counter == limit):
@@ -47,7 +48,8 @@ def loadPose(dir, limit):
                 rot = fh[lms_obj[i][0]].get('rot')
                 # Returns 3*3 numpy array
                 all_lms_array[i] = rot.value
-            poseData.append(all_lms_array)
+            # poseData.append(all_lms_array)
+            poseData = all_lms_array
 
         counter = counter + 1
         if (counter == limit):
@@ -58,5 +60,3 @@ def loadPose(dir, limit):
 
 X = loadPred('2DFeatures', 10)
 Y = loadPose('2DFeatures', 10)
-print(X)
-print(Y)

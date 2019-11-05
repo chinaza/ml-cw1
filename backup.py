@@ -4,8 +4,6 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-import loader
-
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 logging.basicConfig(level=logging.ERROR)
@@ -38,7 +36,7 @@ w2 = tf.Variable(tf.random_normal([n_hidden1, n_hidden2]))
 w3 = tf.Variable(tf.random_normal([n_hidden2, n_output]))
 
 # Defining the input and the output
-X = tf.placeholder("float", [670, 49, 2, n_input])
+X = tf.placeholder("float", [None, n_input])
 Y = tf.placeholder("float", [None, n_output])
 
 
@@ -53,7 +51,7 @@ def multilayer_perceptron(input_d):
     return out_layer
 
 
-def trainNetwork(batch_x, batch_y):
+def trainNetwork():
     # Create model
     neural_network = multilayer_perceptron(X)
 
@@ -67,9 +65,15 @@ def trainNetwork(batch_x, batch_y):
     # Initializing the variables
     init = tf.global_variables_initializer()
 
-    label = batch_y  # +1e-50-1e-50
+    batch_x1 = np.loadtxt('data/x1.txt')
+    batch_x2 = np.loadtxt('data/x2.txt')
+    batch_y1 = np.loadtxt('data/y1.txt')
+    batch_y2 = np.loadtxt('data/y2.txt')
 
-    print(batch_x)
+    label = batch_y2  # +1e-50-1e-50
+
+    batch_x = np.column_stack((batch_x1, batch_x2))
+    batch_y = np.column_stack((batch_y1, batch_y2))
 
     batch_x_train = batch_x[:, 0:599]
 
@@ -111,6 +115,3 @@ def trainNetwork(batch_x, batch_y):
         print("Test Accuracy:", accuracy1.eval({X: batch_x}))
 
         plt.show()
-
-
-trainNetwork(loader.X, loader.Y)
