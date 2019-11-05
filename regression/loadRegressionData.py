@@ -110,7 +110,7 @@ batch_y_test = batch_y
 label_train = label
 label_test = label
 
-kf = KFold(n_splits=2, shuffle=False)
+kf = KFold(n_splits=10, shuffle=False)
 for train_index, test_index in kf.split(batch_x):
     batch_x_train, batch_x_test = batch_x[train_index], batch_x[test_index]
     batch_y_train, batch_y_test = batch_y[train_index], batch_y[test_index]
